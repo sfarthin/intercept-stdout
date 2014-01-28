@@ -1,0 +1,30 @@
+{
+  "name": "intercept-stdout",
+  "version": "0.0.1",
+  "description": "Hooking Node.js stdout",
+  "main": "intercept-stdout.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sfarthin/intercept-stdout"
+  },
+  "keywords": [
+    "stdout",
+    "stderr"
+  ],
+  "author": "Steven Farthing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sfarthin/intercept-stdout/issues"
+  },
+  "dependencies": {
+    "underscore": "~1.5.2",
+    "chai": "~1.8.1",
+    "mocha": "~1.17.1"
+  }
+}
