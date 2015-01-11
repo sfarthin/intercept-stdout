@@ -23,7 +23,9 @@
     "url": "https://github.com/sfarthin/intercept-stdout/issues"
   },
   "dependencies": {
-    "underscore": "~1.5.2",
+    "underscore": "~1.5.2"
+  },
+  "devDependencies": {
     "chai": "~1.8.1",
     "mocha": "~1.17.1"
   }
