@@ -2,21 +2,21 @@
 // https://gist.github.com/benbuckman/2758563
 
 
-var _ 		= require('underscore'),
-	util 	= require('util');
+var toArray	= require('lodash.toarray'),
+	util			= require('util');
 
 // intercept stdout, passes thru callback
 // also pass console.error thru stdout so it goes to callback too
 // (stdout.write and stderr.write are both refs to the same stream.write function)
 // returns an unhook() function, call when done intercepting
 module.exports = function (callback) {
-	
+
 	var old_stdout_write = process.stdout.write,
 	old_console_error = console.error;
 
 	process.stdout.write = (function(write) {
 		return function(string, encoding, fd) {
-			var args = _.toArray(arguments);
+			var args = toArray(arguments);
 			write.apply(process.stdout, args);
 
 			// only intercept the string
@@ -26,7 +26,7 @@ module.exports = function (callback) {
 
 	console.error = (function(log) {
 		return function() {
-			var args = _.toArray(arguments);
+			var args = toArray(arguments);
 			args.unshift('[ERROR]');
 			console.log.apply(console.log, args);
 
@@ -40,5 +40,5 @@ module.exports = function (callback) {
 		process.stdout.write = old_stdout_write;
 		console.error = old_console_error;
 	};
-	
+
 };
