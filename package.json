@@ -1,6 +1,6 @@
 {
   "name": "intercept-stdout",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Hooking Node.js stdout",
   "main": "intercept-stdout.js",
   "directories": {
