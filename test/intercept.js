@@ -43,4 +43,50 @@ describe("intercept-stdout", function() {
 		
 	});
 
+	it("should modify output if callback returns a string", function() {
+
+		var captured = [];
+		var unhook = Intercept(function(txt) {
+			var mod = modified[captured.length];
+			captured.push( mod );
+			return mod;
+		});
+
+		var arr = ["capture-this!", "日本語", "-k21.12-0k-ª–m-md1∆º¡∆ªº"];
+		var modified = ["print-this!", "asdf", ""];
+
+		arr.forEach(function(txt) {
+			// send to stdout.
+			console.log(txt);
+			// make sure captured doesn't contain the original text
+			expect(captured).to.not.contain(txt);
+		});
+
+		expect(captured).to.eql(modified);
+
+		unhook();
+
+	});
+
+	it("should do the same for console.error", function() {
+
+		var captured = [];
+		var unhook = Intercept(function(txt) {
+			var mod = modified[captured.length];
+			captured.push( mod );
+			return mod;
+		});
+
+		var arr = ["capture-this!", "日本語", "-k21.12-0k-ª–m-md1∆º¡∆ªº"];
+		var modified = ["print-this!", "asdf", ""];
+
+		arr.forEach(function(txt) {
+			console.error(txt);
+		});
+
+		expect(captured).to.eql(modified);
+
+		unhook();
+	});
+
 });

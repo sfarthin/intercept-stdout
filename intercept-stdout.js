@@ -17,23 +17,27 @@ module.exports = function (callback) {
 	process.stdout.write = (function(write) {
 		return function(string, encoding, fd) {
 			var args = toArray(arguments);
+			args[0] = interceptor( string );
 			write.apply(process.stdout, args);
-
-			// only intercept the string
-			callback.call(callback, string);
 		};
 	}(process.stdout.write));
 
 	console.error = (function(log) {
 		return function() {
 			var args = toArray(arguments);
-			args.unshift('[ERROR]');
+			args.unshift('\x1b[31m[ERROR]\x1b[0m');
 			console.log.apply(console.log, args);
-
-			// string here encapsulates all the args
-			callback.call(callback, util.format(args));
 		};
 	}(console.error));
+
+	function interceptor(string) {
+		// only intercept the string
+		var result = callback(string);
+		if (typeof result == 'string') {
+			string = result.replace( /\n$/ , '' ) + (result && (/\n$/).test( string ) ? '\n' : '');
+		}
+		return string;
+	}
 
 	// puts back to original
 	return function unhook() {
