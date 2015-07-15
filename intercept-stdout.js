@@ -5,32 +5,37 @@
 var toArray	= require('lodash.toarray'),
 	util			= require('util');
 
-// intercept stdout, passes thru callback
-// also pass console.error thru stdout so it goes to callback too
-// (stdout.write and stderr.write are both refs to the same stream.write function)
+// Intercept stdout and stderr to pass output thru callback.
+//
+//  Optionally, takes two callbacks.
+//    If two callbacks are specified, 
+//      the first intercepts stdout, and
+//      the second intercepts stderr.
+//
 // returns an unhook() function, call when done intercepting
-module.exports = function (callback) {
+module.exports = function (stdoutIntercept, stderrIntercept) {
+	stderrIntercept = stderrIntercept || stdoutIntercept;
 
-	var old_stdout_write = process.stdout.write,
-	old_console_error = console.error;
+	var old_stdout_write = process.stdout.write;
+	var old_stderr_write = process.stderr.write;
 
 	process.stdout.write = (function(write) {
 		return function(string, encoding, fd) {
 			var args = toArray(arguments);
-			args[0] = interceptor( string );
+			args[0] = interceptor( string, stdoutIntercept );
 			write.apply(process.stdout, args);
 		};
 	}(process.stdout.write));
 
-	console.error = (function(log) {
-		return function() {
+	process.stderr.write = (function(write) {
+		return function(string, encoding, fd) {
 			var args = toArray(arguments);
-			args.unshift('\x1b[31m[ERROR]\x1b[0m');
-			console.log.apply(console.log, args);
+			args[0] = interceptor( string, stderrIntercept );
+			write.apply(process.stderr, args);
 		};
-	}(console.error));
+	}(process.stderr.write));
 
-	function interceptor(string) {
+	function interceptor(string, callback) {
 		// only intercept the string
 		var result = callback(string);
 		if (typeof result == 'string') {
@@ -42,7 +47,7 @@ module.exports = function (callback) {
 	// puts back to original
 	return function unhook() {
 		process.stdout.write = old_stdout_write;
-		console.error = old_console_error;
+		process.stderr.write = old_stderr_write;
 	};
 
 };
