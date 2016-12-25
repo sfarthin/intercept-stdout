@@ -1,42 +1,54 @@
 # Node.js Intercept stdout
 
-> intercept-stdout captures or modifies stdout and/or stderr.
+`intercept-stdout` captures or modifies stdout and/or stderr.
 
-> _<sup>Based on [this](https://gist.github.com/benbuckman/2758563) gist</sup>_
+Based on [this](https://gist.github.com/benbuckman/2758563) gist.
 
 ## Capture
 ```javascript
-var intercept = require("intercept-stdout"),
-	captured_text = "";
+// Start capturing stdout.
+var intercept = require("intercept-stdout");
+var captured_text = "";
 
-var unhook_intercept = intercept(function(txt) {
-	captured_text += txt;
+var unhook_intercept = intercept(function(text) {
+  captured_text += text;
 });
 
-console.log("This text is being captured");
+console.log("This text is being captured.");
 
-// Let's stop capturing stdout.
+// Stop capturing stdout.
 unhook_intercept();
 
-console.log("This text is not being captured");
+console.log("This text is not being captured.");
+
+// This is the text that was captured.
+console.log("CAPTURED:", captured_text);
 ```
 
 ## Modify
 ```javascript
+// Start capturing stdout.
 var intercept = require("intercept-stdout");
+var modified_text = "";
 
-var unhook_intercept = intercept(function(txt) {
-	return txt.replace( /this/i , 'that' );
+var unhook_intercept = intercept(function(text) {
+  modified_text += text.replace(/captured/i, "modified");
 });
 
-console.log("This text is being modified");
-// -> that text is being modified
+console.log("This text is being captured.");
+
+// Stop capturing stdout.
+unhook_intercept();
+
+// This is the modified text.
+console.log("MODIFIED:", modified_text);
 ```
 
 ## Test
-
-	npm install
-	npm test
+```
+npm install
+npm test
+```
 
 ## Separating Error Text
 
