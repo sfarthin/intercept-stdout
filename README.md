@@ -44,6 +44,29 @@ unhook_intercept();
 console.log("MODIFIED:", modified_text);
 ```
 
+## Suppress output
+
+By default, the captured text is still sent to stdout. To avoid this, return an empty string in the interceptor:
+
+```javascript
+var intercept = require("intercept-stdout");
+
+var logs = [];
+
+var unhook_intercept = intercept(function(text) {
+  logs.push(text);
+  return '';
+});
+
+console.log("This text won't be sent to stdout.");
+
+// Stop capturing stdout.
+unhook_intercept();
+
+// Strings sent to stdout
+console.log("Logs:", logs);
+```
+
 ## Test
 ```
 npm install
