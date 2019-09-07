@@ -67,6 +67,14 @@ unhook_intercept();
 console.log("Logs:", logs);
 ```
 
+## Typescript
+
+A declaration file is provided. Use Typescript's [import = require() syntax](
+https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require):
+```typescript
+import intercept = require("intercept-stdout");
+```
+
 ## Test
 ```
 npm install
