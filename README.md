@@ -7,10 +7,10 @@ Based on [this](https://gist.github.com/benbuckman/2758563) gist.
 ## Capture
 ```javascript
 // Start capturing stdout.
-var intercept = require("intercept-stdout");
-var captured_text = "";
+const intercept = require("intercept-stdout");
+let captured_text = "";
 
-var unhook_intercept = intercept(function(text) {
+const unhook_intercept = intercept(function(text) {
   captured_text += text;
 });
 
@@ -28,10 +28,10 @@ console.log("CAPTURED:", captured_text);
 ## Modify
 ```javascript
 // Start capturing stdout.
-var intercept = require("intercept-stdout");
-var modified_text = "";
+const intercept = require("intercept-stdout");
+let modified_text = "";
 
-var unhook_intercept = intercept(function(text) {
+const unhook_intercept = intercept(function(text) {
   modified_text += text.replace(/captured/i, "modified");
 });
 
@@ -49,9 +49,9 @@ console.log("MODIFIED:", modified_text);
 By default, the captured text is still sent to stdout. To avoid this, return an empty string in the interceptor:
 
 ```javascript
-var intercept = require("intercept-stdout");
+const intercept = require("intercept-stdout");
 
-var logs = [];
+const logs = [];
 
 var unhook_intercept = intercept(function(text) {
   logs.push(text);
