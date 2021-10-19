@@ -1,10 +1,6 @@
 // Borrowed.
 // https://gist.github.com/benbuckman/2758563
 
-
-var toArray	= require('lodash.toarray'),
-	util			= require('util');
-
 // Intercept stdout and stderr to pass output thru callback.
 //
 //  Optionally, takes two callbacks.
@@ -16,12 +12,12 @@ var toArray	= require('lodash.toarray'),
 module.exports = function (stdoutIntercept, stderrIntercept) {
 	stderrIntercept = stderrIntercept || stdoutIntercept;
 
-	var old_stdout_write = process.stdout.write;
-	var old_stderr_write = process.stderr.write;
+	const old_stdout_write = process.stdout.write;
+	const old_stderr_write = process.stderr.write;
 
 	process.stdout.write = (function(write) {
 		return function(string, encoding, fd) {
-			var args = toArray(arguments);
+			const args = [ ...arguments ];
 			args[0] = interceptor( string, stdoutIntercept );
 			write.apply(process.stdout, args);
 		};
@@ -29,7 +25,7 @@ module.exports = function (stdoutIntercept, stderrIntercept) {
 
 	process.stderr.write = (function(write) {
 		return function(string, encoding, fd) {
-			var args = toArray(arguments);
+			const args = [ ...arguments ];
 			args[0] = interceptor( string, stderrIntercept );
 			write.apply(process.stderr, args);
 		};
@@ -37,7 +33,7 @@ module.exports = function (stdoutIntercept, stderrIntercept) {
 
 	function interceptor(string, callback) {
 		// only intercept the string
-		var result = callback(string);
+		const result = callback(string);
 		if (typeof result == 'string') {
 			string = result.replace( /\n$/ , '' ) + (result && (/\n$/).test( string ) ? '\n' : '');
 		}
