@@ -22,9 +22,6 @@
   "bugs": {
     "url": "https://github.com/sfarthin/intercept-stdout/issues"
   },
-  "dependencies": {
-    "lodash.toarray": "^3.0.0"
-  },
   "devDependencies": {
     "chai": "~1.8.1",
     "mocha": "~1.17.1"
